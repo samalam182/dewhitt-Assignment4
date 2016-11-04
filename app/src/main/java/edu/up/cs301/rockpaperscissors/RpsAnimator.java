@@ -24,7 +24,7 @@ import static android.R.attr.button;
  * @author Steve Vegdahl
  * @version August 2016
  */
-public class RpsAnimator extends RpsActivity implements Animator{
+public class RpsAnimator implements Animator{
 
 	// instance variables
 	private int count = 0; // counts the number of logical clock ticks
@@ -40,19 +40,7 @@ public class RpsAnimator extends RpsActivity implements Animator{
 	private final int leftSide = 0;
 	private final int bottom = 1186;
 
-	Button rock;
-	Button scis;
-	Button paper;
-	Button rand;
 
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_rps);
-		rock = (Button)findViewById(R.id.rockButt);
-		scis = (Button)findViewById(R.id.scisButt);
-		paper = (Button)findViewById(R.id.paperButt);
-		rand = (Button)findViewById(R.id.randButt);
-	}
 	/**
 	 * Interval between animation frames: .03 seconds (i.e., about 33 times
 	 * per second).
