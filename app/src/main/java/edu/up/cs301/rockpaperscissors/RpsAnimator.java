@@ -1,15 +1,21 @@
 package edu.up.cs301.rockpaperscissors;
 
+import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import edu.up.cs301.animation.Animator;
+
+import static android.R.attr.button;
 
 
 /**
@@ -18,7 +24,7 @@ import edu.up.cs301.animation.Animator;
  * @author Steve Vegdahl
  * @version August 2016
  */
-public class RpsAnimator implements Animator {
+public class RpsAnimator extends RpsActivity implements Animator{
 
 	// instance variables
 	private int count = 0; // counts the number of logical clock ticks
@@ -27,15 +33,34 @@ public class RpsAnimator implements Animator {
 	private int gravityX = 0;
 	private int gravityY = 0;
 	ArrayList<RpsObject> RpsList = new ArrayList<RpsObject>();
+	RpsObject temp;
 	int cType = 0;
 	int cNum = 0;
+	private final int rightSide = 2048;
+	private final int leftSide = 0;
+	private final int bottom = 1186;
 
+	Button rock;
+	Button scis;
+	Button paper;
+	Button rand;
+
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_rps);
+		rock = (Button)findViewById(R.id.rockButt);
+		scis = (Button)findViewById(R.id.scisButt);
+		paper = (Button)findViewById(R.id.paperButt);
+		rand = (Button)findViewById(R.id.randButt);
+	}
 	/**
 	 * Interval between animation frames: .03 seconds (i.e., about 33 times
 	 * per second).
 	 *
 	 * @return the time interval between frames, in milliseconds.
 	 */
+
+
 	public int interval() {
 		return 33;
 	}
@@ -51,30 +76,32 @@ public class RpsAnimator implements Animator {
 	}
 
 	/**
-	 * Tells the animation whether to go backwards.
-	 *
-	 * @param b true iff animation is to go backwards.
-	 */
-	public void goBackwards(boolean b) {
-		// set our instance variable
-		goBackwards = b;
-	}
-
-	/**
 	 * Action to perform on clock tick
 	 *
 	 * @param g the graphics object on which to draw
 	 */
 	public void tick(Canvas g) {
-		count++;
 
 		Paint p = new Paint();
 		p.setColor(Color.BLUE);
+
 		if(RpsList.size() > 0) {
+
 			Log.i("List Size: ", "" + RpsList.size());
 			for(int i = 0; i<RpsList.size(); i++) {
+				temp = RpsList.get(i);
+
+				if(temp.getPosX() < leftSide || (temp.getPosX()+temp.getSizeX() > rightSide)){
+					temp.bounceX();
+				}
+
+				if((temp.getPosY()+temp.getSizeY() > bottom)){
+					temp.bounceY();
+				}
+
 				RpsList.get(i).draw(p, g);
 				RpsList.get(i).tick();
+
 			}
 		}
 
@@ -85,7 +112,7 @@ public class RpsAnimator implements Animator {
 	 *
 	 * @return indication of whether to pause
 	 */
-	public void addObject(int amount){
+	protected void addObject(int amount){
 
 		int temp = amount;
 		int amountRock = (int)(Math.random()*temp);
@@ -100,26 +127,25 @@ public class RpsAnimator implements Animator {
 
 	}
 
-	private void addObject(int amount, int type){
+	protected void addObject(int amount, int type){
 		float randX, randY, randVelX, randVelY, randSizeX, randSizeY;
-		for(int i = 0; i<amount; i++){
-			randX = (float)(50 + 1900*Math.random());
-			randY = (float)(50 + 1400*Math.random());
-			randVelX = (float)(16*Math.random() - 8);
-			randVelY = (float)(16*Math.random() - 8);
-			randSizeX = (float)(2 + (4*Math.random()));
-			randSizeY = (float)(2 + (4*Math.random()));
+
+		for (int i = 0; i < amount; i++) {
+			randX = (float) (100 + 1500 * Math.random());
+			randY = (float) (100 + 1000 * Math.random());
+			randVelX = (float) (20 * Math.random() - 14);
+			randVelY = (float) (20 * Math.random() - 14);
+			randSizeX = (float) (2 + (4 * Math.random()));
+			randSizeY = (float) (2 + (4 * Math.random()));
 			RpsObject temp;
-			if(type == 0){
-				temp = new RpsRock(randX, randY, randVelX, randVelY,randSizeX, randSizeY);
+			if (type == 0) {
+				temp = new RpsRock(randX, randY, randVelX, randVelY, randSizeX, randSizeY);
 				RpsList.add(temp);
-			}
-			else if(type == 1){
-				temp = new RpsScis(randX, randY, randVelX, randVelY,randSizeX, randSizeY);
+			} else if (type == 1) {
+				temp = new RpsScis(randX, randY, randVelX, randVelY, randSizeX, randSizeY);
 				RpsList.add(temp);
-			}
-			else{
-				temp = new RpsPaper(randX, randY, randVelX, randVelY,randSizeX, randSizeY);
+			} else {
+				temp = new RpsPaper(randX, randY, randVelX, randVelY, randSizeX, randSizeY);
 				RpsList.add(temp);
 			}
 		}
@@ -141,21 +167,15 @@ public class RpsAnimator implements Animator {
 	/**
 	 * reverse the ball's direction when the screen is tapped
 	 */
+
+
 	public void onTouch(MotionEvent event)
 	{
 		if (event.getAction() == MotionEvent.ACTION_DOWN)
 		{
 
-			//cType = 0;
-			if(cType < 2) {
-				cType= cType+1;
-			}
-			else{
-				cType = 0;
-			}
-
-			addObject(1, cType);
 		}
 	}
+
 
 }//class RpsAnimator

@@ -5,6 +5,45 @@
     android:layout_height="match_parent"
     tools:context=".RpsActivity">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/buttons">
+
+        <Button
+            android:text="Add Rock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rockButt"
+            android:onClick="addRock"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="Add Scissor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/scisButt"
+            android:onClick="addScis"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="Add Paper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/paperButt"
+            android:onClick="addPaper"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="Add 15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/randButt"
+            android:onClick="addRand"
+            android:layout_weight="1" />
+    </LinearLayout>
+
     <edu.up.cs301.animation.AnimationSurface
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -47,5 +47,20 @@ public class RpsActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    public void addRock(View view){
+        animator.addObject(1, 0);
+    }
+
+    public void addScis(View view){
+        animator.addObject(1, 1);
+    }
+
+    public void addPaper(View view){
+        animator.addObject(1, 2);
+    }
+
+    public void addRand(View view){
+        animator.addObject(15);
+    }
 
 }

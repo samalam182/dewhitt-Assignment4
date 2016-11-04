@@ -18,6 +18,7 @@ public class RpsRock extends RpsObject {
 //        Log.i("Position", "" + xPos + " " + yPos);
 //        Log.i("Velocity", "" + xSpd + " " + ySpd);
 //        Log.i("Size", "" + xSize + " " + ySize);
+
         Paint RPaint = objColor;
         RPaint.setColor(Color.BLACK);
 

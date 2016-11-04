@@ -35,7 +35,7 @@ public abstract class RpsObject {
 
     //whenever the animator detects that the object hits the ground
     //it reverses direction and slows down by 10%
-    public void bounceY(){ ySpd = -(float) (0.9*ySpd); }
+    public void bounceY(){ ySpd = -(float) (0.8*ySpd); }
 
     public void isDestroyed(){ destroyed = true; }
 
@@ -44,6 +44,23 @@ public abstract class RpsObject {
     public void tick(){
         xPos += xSpd;
         yPos += ySpd;
+
+        ySpd += 0.6;
+    }
+
+    public float getSizeX(){
+        return 25*xSize;
+    }
+    public float getSizeY(){
+        return 25*ySize;
+    }
+
+    public float getPosX(){
+        return xPos;
+    }
+
+    public float getPosY(){
+        return yPos;
     }
 
 }
