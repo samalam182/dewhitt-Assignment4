@@ -26,6 +26,7 @@ public class RpsAnimator implements Animator {
 	private boolean gravity = false;
 	private int gravityX = 0;
 	private int gravityY = 0;
+	ArrayList<RpsObject> RpsList = new ArrayList<RpsObject>();
 
 	/**
 	 * Interval between animation frames: .03 seconds (i.e., about 33 times
@@ -64,7 +65,7 @@ public class RpsAnimator implements Animator {
 	 */
 	public void tick(Canvas g) {
 
-		ArrayList<RpsObject> object = new ArrayList<RpsObject>();
+
 
 		// bump our count either up or down by one, depending on whether
 		// we are in "backwards mode".
@@ -114,8 +115,27 @@ public class RpsAnimator implements Animator {
 	}
 
 	public void addObject(int amount, int type){
+		int randX, randY, randVelX, randVelY, randSizeX, randSizeY;
 		for(int i = 0; i<amount; i++){
+			randX = (int)(100 + 1900*Math.random());
+			randY = (int)(100 + 1400*Math.random());
+			randVelX = (int)(25*Math.random());
+			randVelY = randVelX;
+			randSizeX = (int)(4*Math.random());
+			randSizeY = randSizeX;
 
+			if(type == 0){
+				RpsRock tempR = new RpsRock(randX, randY, randVelX, randVelY,randSizeX, randSizeY);
+				RpsList.add(tempR);
+			}
+			else if(type == 1){
+				RpsScis tempS = new RpsScis(randX, randY, randVelX, randVelY,randSizeX, randSizeY);
+				RpsList.add(tempS);
+			}
+			else{
+				RpsPaper tempP = new RpsPaper(randX, randY, randVelX, randVelY,randSizeX, randSizeY);
+				RpsList.add(tempP);
+			}
 		}
 	}
 

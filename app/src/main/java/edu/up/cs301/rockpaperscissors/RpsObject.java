@@ -1,6 +1,8 @@
 package edu.up.cs301.rockpaperscissors;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
+
 /**
  * Created by Samuel on 11/3/2016.
  */
@@ -37,7 +39,7 @@ public abstract class RpsObject {
 
     public void isDestroyed(){ destroyed = true; }
 
-    public void draw(){
+    public void draw(Paint objColor){
         return;
     }
 
