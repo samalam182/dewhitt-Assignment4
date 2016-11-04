@@ -39,11 +39,9 @@ public abstract class RpsObject {
 
     public void isDestroyed(){ destroyed = true; }
 
-    public void draw(Paint objColor){
-        return;
-    }
+    public void draw(Paint objColor, Canvas c){}
 
-    public void tick(int count){
+    public void tick(){
         xPos += xSpd;
         yPos += ySpd;
     }

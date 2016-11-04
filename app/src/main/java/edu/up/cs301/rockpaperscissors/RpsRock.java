@@ -1,6 +1,7 @@
 package edu.up.cs301.rockpaperscissors;
 
 import android.graphics.*;
+import android.util.Log;
 
 /**
  * Created by Samuel on 11/3/2016.
@@ -13,20 +14,24 @@ public class RpsRock extends RpsObject {
     }
 
     @Override
-    public void draw(Paint objColor) {
-
+    public void draw(Paint objColor, Canvas c) {
+//        Log.i("Position", "" + xPos + " " + yPos);
+//        Log.i("Velocity", "" + xSpd + " " + ySpd);
+//        Log.i("Size", "" + xSize + " " + ySize);
+        Paint RPaint = objColor;
+        RPaint.setColor(Color.BLACK);
 
         Path p = new Path();
-        p.moveTo(xPos + 5*xSize, yPos + 5*ySize);
-        p.lineTo(xPos + 2*xSize, yPos + 13*ySize);
-        p.lineTo(xPos + 5*xSize, yPos + 20*ySize);
-        p.lineTo(xPos + 13*xSize, yPos + 20*ySize);
-        p.lineTo(xPos + 20*xSize, yPos + 15*ySize);
-        p.lineTo(xPos + 17*xSize, yPos + 5*ySize);
-        p.lineTo(xPos + 12*xSize, yPos + 7*ySize);
-        p.lineTo(xPos + 5*xSize, yPos + 5*ySize);
+        p.moveTo(xPos + 7*xSize, yPos + 0*ySize);
+        p.lineTo(xPos + 0*xSize, yPos + 13*ySize);
+        p.lineTo(xPos + 5*xSize, yPos + 25*ySize);
+        p.lineTo(xPos + 17*xSize, yPos + 25*ySize);
+        p.lineTo(xPos + 25*xSize, yPos + 12*ySize);
+        p.lineTo(xPos + 21*xSize, yPos + 0*ySize);
+        p.lineTo(xPos + 14*xSize, yPos + 2*ySize);
+        p.lineTo(xPos + 7*xSize, yPos + 0*ySize);
 
-
+        c.drawPath(p, RPaint);
 
     }
 }

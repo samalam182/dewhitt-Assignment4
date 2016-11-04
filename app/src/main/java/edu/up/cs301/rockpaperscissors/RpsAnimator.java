@@ -27,6 +27,8 @@ public class RpsAnimator implements Animator {
 	private int gravityX = 0;
 	private int gravityY = 0;
 	ArrayList<RpsObject> RpsList = new ArrayList<RpsObject>();
+	int cType = 0;
+	int cNum = 0;
 
 	/**
 	 * Interval between animation frames: .03 seconds (i.e., about 33 times
@@ -64,34 +66,18 @@ public class RpsAnimator implements Animator {
 	 * @param g the graphics object on which to draw
 	 */
 	public void tick(Canvas g) {
-
-
-
-		// bump our count either up or down by one, depending on whether
-		// we are in "backwards mode".
-//		if (goBackwards) {
-//			count--;
-//		}
-//		else {
-//			count++;
-//		}
 		count++;
 
-		// Determine the pixel position of our ball.  Multiplying by 15
-		// has the effect of moving 15 pixel per frame.  Modding by minimum
-		// canvas-size dimension (with the appropriate correction if the value
-		// was negative) has the effect of "wrapping around" when we get to
+		Paint p = new Paint();
+		p.setColor(Color.BLUE);
+		if(RpsList.size() > 0) {
+			Log.i("List Size: ", "" + RpsList.size());
+			for(int i = 0; i<RpsList.size(); i++) {
+				RpsList.get(i).draw(p, g);
+				RpsList.get(i).tick();
+			}
+		}
 
-//		int wrap = Math.min(g.getWidth(), g.getHeight());
-//		// either end
-//		int num = (count*15)%wrap;
-//		if (num < 0) num += wrap;
-//
-//		// Draw the ball in the correct position.
-//		Paint redPaint = new Paint();
-//		redPaint.setColor(Color.RED);
-//		g.drawCircle(num, num, 60, redPaint);
-//		redPaint.setColor(0xff0000ff);
 	}
 
 	/**
@@ -114,27 +100,27 @@ public class RpsAnimator implements Animator {
 
 	}
 
-	public void addObject(int amount, int type){
-		int randX, randY, randVelX, randVelY, randSizeX, randSizeY;
+	private void addObject(int amount, int type){
+		float randX, randY, randVelX, randVelY, randSizeX, randSizeY;
 		for(int i = 0; i<amount; i++){
-			randX = (int)(100 + 1900*Math.random());
-			randY = (int)(100 + 1400*Math.random());
-			randVelX = (int)(25*Math.random());
-			randVelY = randVelX;
-			randSizeX = (int)(4*Math.random());
-			randSizeY = randSizeX;
-
+			randX = (float)(50 + 1900*Math.random());
+			randY = (float)(50 + 1400*Math.random());
+			randVelX = (float)(16*Math.random() - 8);
+			randVelY = (float)(16*Math.random() - 8);
+			randSizeX = (float)(2 + (4*Math.random()));
+			randSizeY = (float)(2 + (4*Math.random()));
+			RpsObject temp;
 			if(type == 0){
-				RpsRock tempR = new RpsRock(randX, randY, randVelX, randVelY,randSizeX, randSizeY);
-				RpsList.add(tempR);
+				temp = new RpsRock(randX, randY, randVelX, randVelY,randSizeX, randSizeY);
+				RpsList.add(temp);
 			}
 			else if(type == 1){
-				RpsScis tempS = new RpsScis(randX, randY, randVelX, randVelY,randSizeX, randSizeY);
-				RpsList.add(tempS);
+				temp = new RpsScis(randX, randY, randVelX, randVelY,randSizeX, randSizeY);
+				RpsList.add(temp);
 			}
 			else{
-				RpsPaper tempP = new RpsPaper(randX, randY, randVelX, randVelY,randSizeX, randSizeY);
-				RpsList.add(tempP);
+				temp = new RpsPaper(randX, randY, randVelX, randVelY,randSizeX, randSizeY);
+				RpsList.add(temp);
 			}
 		}
 	}
@@ -159,7 +145,16 @@ public class RpsAnimator implements Animator {
 	{
 		if (event.getAction() == MotionEvent.ACTION_DOWN)
 		{
-			goBackwards = !goBackwards;
+
+			//cType = 0;
+			if(cType < 2) {
+				cType= cType+1;
+			}
+			else{
+				cType = 0;
+			}
+
+			addObject(1, cType);
 		}
 	}
 
