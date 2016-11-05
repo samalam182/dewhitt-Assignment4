@@ -1,1 +1,33 @@
 Document all outside help in this file.
+
+11/4/16:
+
+  - Keoki Massad told me to cast objects back into their given type before you destroy them. This allowed
+    me to destroy objects properly. Before it would just destroy everything of object type. He also siggested
+    that instead of just switching the velocity when a wall bounch happens to move the object back in bounds
+    so that no clipping occurs.
+
+
+Visited the following websites for help on touch events, drawing paths, and creating arraylists properly,
+using random numbers better, events etc
+
+ - https://developer.android.com/reference/android/graphics/drawable/AnimationDrawable.html
+ - https://developer.android.com/reference/android/graphics/Path.html
+ - https://developer.android.com/reference/android/graphics/Path.html
+ - https://developer.android.com/reference/java/util/ArrayList.html
+ - http://stackoverflow.com/questions/5915892/creating-a-new-arraylist-in-java
+ - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+ - https://developer.android.com/reference/java/util/ArrayList.html
+ - https://developer.android.com/reference/android/graphics/Paint.html
+ - http://stackoverflow.com/questions/3938992/how-to-generate-random-positive-and-negative-numbers-in-java
+ - https://www.google.com/search?q=android+screen+size+in+dp&oq=android+screen+size+in+dp&aqs=chrome..69i57j0l4.11627j0j7&sourceid=chrome&ie=UTF-8#q=nexu+9+pixel+size
+ - https://developer.android.com/reference/android/view/MotionEvent.html
+ - https://developer.android.com/reference/android/view/MotionEvent.html#ACTION_DOWN
+ - https://developer.android.com/reference/android/view/MotionEvent.html#ACTION_BUTTON_PRESS
+ - https://developer.android.com/reference/android/app/Activity.html
+ - https://developer.android.com/reference/android/widget/Button.html
+ - http://teaching.up.edu/cs301/lectures/lec05.pdf
+ - http://stackoverflow.com/questions/10661081/java-does-returning-a-value-break-a-loop
+ - https://developer.android.com/reference/java/lang/Math.html
+ - https://docs.oracle.com/javase/tutorial/java/nutsandbolts/switch.html
+ -
