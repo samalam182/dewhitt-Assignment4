@@ -2,13 +2,22 @@ package edu.up.cs301.rockpaperscissors;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 
 /**
- * Created by Samuel on 11/3/2016.
+ * rock-paper-scissors animation
+ *
+ * @author Steve Vegdahl
+ * @author Samuel DeWhitt
+ * @version November 2016
+ *
+ * Abstact Class that defines necessary parameters and methods for Paper, Rock, and Scissors
  */
 
 
 public abstract class RpsObject {
+
+    //instance variables
     protected float xPos;
     protected float yPos;
     protected float xSpd;
@@ -19,9 +28,11 @@ public abstract class RpsObject {
     protected float gravityY;
     protected boolean destroyed;
 
+    //necessary contructor for the subclasses
     public RpsObject(){}
 
     public RpsObject(float xP, float yP, float xS, float yS, float xSz, float ySz){
+        //Initialize all the variables based on the contructor
         xPos = xP;
         yPos = yP;
         xSpd = xS;
@@ -31,7 +42,8 @@ public abstract class RpsObject {
         destroyed = false;
         gravityX = 0;
         gravityY = 0;
-    }
+
+        }
 
     //whenever the animator detects that the object hits the left or right wall
     //it reverses direction and slows down by 10%
@@ -39,14 +51,18 @@ public abstract class RpsObject {
 
     //whenever the animator detects that the object hits the ground
     //it reverses direction and slows down by 10%
-    public void bounceY(){ ySpd = -(float) (0.8*ySpd); }
+    public void bounceY(){ ySpd = -(float) (0.9*ySpd); }
 
+    //sets the destroy variable to true to show it's destroyed
     public void destroy(){ destroyed = true; }
 
+    //checks to see if the object is destroyed
     public boolean isDestroyed(){ return destroyed; }
 
+    //generic draw method will be implemented further in subclasses
     public void draw(Paint objColor, Canvas c){}
 
+    //method called when one object collides with another and the necessary one is destroyed
     public void absorb(RpsObject obj){
         xSize += obj.getSizeX()/50;
         ySize += obj.getSizeY()/50;
@@ -54,16 +70,20 @@ public abstract class RpsObject {
         ySpd += obj.getVelY()/2;
     }
 
+    //called to update the objects speed and position based on
+    //'natural' gravity and finger gravity.
     public void ticked(){
         xPos += xSpd;
         yPos += ySpd;
 
         ySpd += 0.8;
 
-        xSpd += gravityX*30;
-        ySpd += gravityY*30;
+        xSpd += gravityX*12;
+        ySpd += gravityY*12;
     }
 
+    // below are a bunch of getter and setter methods
+    //25 is used because I designed each object as it's smallest version 25x25 pixels
     public float getSizeX(){
         return 25*xSize;
     }
@@ -105,4 +125,34 @@ public abstract class RpsObject {
         gravityX = 0;
         gravityY = 0;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

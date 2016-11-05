@@ -10,6 +10,14 @@ import android.widget.Button;
 import edu.up.cs301.animation.AnimationSurface;
 import edu.up.cs301.animation.Animator;
 
+/**
+ * rock-paper-scissors animation
+ *
+ * @author Steve Vegdahl
+ * @author Samuel DeWhitt
+ * @version November 2016
+ */
+
 public class RpsActivity extends AppCompatActivity {
 
     // the animator
@@ -48,6 +56,8 @@ public class RpsActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    //Had to put these onClicks into RpsActivity or else they wouldn't work
     public void addRock(View view){
         animator.addObject(1, 0);
     }

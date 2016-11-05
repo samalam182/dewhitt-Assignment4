@@ -6,7 +6,11 @@ import android.graphics.Paint;
 import android.graphics.Path;
 
 /**
- * Created by Samuel on 11/4/2016.
+ * rock-paper-scissors animation
+ *
+ * @author Steve Vegdahl
+ * @author Samuel DeWhitt
+ * @version November 2016
  */
 
 public class RpsScis extends RpsObject {
@@ -15,6 +19,9 @@ public class RpsScis extends RpsObject {
         super(xP, yP, xS, yS, xSz, ySz);
     }
 
+
+    // sets a paint, creates a path, and then draws the path and paint
+    //creates a very ugly pair of scissors
     @Override
     public void draw(Paint objColor, Canvas c) {
         Paint SPaint = objColor;
