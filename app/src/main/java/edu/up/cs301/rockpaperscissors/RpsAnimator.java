@@ -1,21 +1,28 @@
 package edu.up.cs301.rockpaperscissors;
 
-import android.app.Activity;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
-import java.util.ArrayList;
-import java.util.Random;
 
+import java.util.ArrayList;
+import java.lang.Math;
+
+import edu.up.cs301.animation.AnimationSurface;
 import edu.up.cs301.animation.Animator;
 
 import static android.R.attr.button;
+import static android.util.FloatMath.sqrt;
+import static android.view.MotionEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_MOVE;
+import static android.view.MotionEvent.ACTION_UP;
 
 
 /**
@@ -24,7 +31,7 @@ import static android.R.attr.button;
  * @author Steve Vegdahl
  * @version August 2016
  */
-public class RpsAnimator implements Animator{
+public class RpsAnimator extends RpsActivity implements Animator{
 
 	// instance variables
 	private int count = 0; // counts the number of logical clock ticks
@@ -33,14 +40,27 @@ public class RpsAnimator implements Animator{
 	private int gravityX = 0;
 	private int gravityY = 0;
 	ArrayList<RpsObject> RpsList = new ArrayList<RpsObject>();
-	RpsObject temp;
-	int cType = 0;
-	int cNum = 0;
+	RpsObject tempOne;
+	RpsObject tempTwo;
+
 	private final int rightSide = 2048;
 	private final int leftSide = 0;
 	private final int bottom = 1186;
 
+	Button rock;
+	Button scis;
+	Button paper;
+	Button rand;
 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_rps);
+		rock = (Button)findViewById(R.id.rockButt);
+		scis = (Button)findViewById(R.id.scisButt);
+		paper = (Button)findViewById(R.id.paperButt);
+		rand = (Button)findViewById(R.id.randButt);
+	}
 	/**
 	 * Interval between animation frames: .03 seconds (i.e., about 33 times
 	 * per second).
@@ -75,24 +95,129 @@ public class RpsAnimator implements Animator{
 
 		if(RpsList.size() > 0) {
 
-			Log.i("List Size: ", "" + RpsList.size());
+			//Log.i("List Size: ", "" + RpsList.size());
 			for(int i = 0; i<RpsList.size(); i++) {
-				temp = RpsList.get(i);
+				tempOne = RpsList.get(i);
 
-				if(temp.getPosX() < leftSide || (temp.getPosX()+temp.getSizeX() > rightSide)){
-					temp.bounceX();
+
+
+				if(tempOne.getPosX() < leftSide){
+					tempOne.setxPos(1);
+					tempOne.bounceX();
+				}
+				if(tempOne.getPosX()+tempOne.getSizeX() > rightSide){
+					tempOne.setxPos(rightSide - tempOne.getSizeX() - 1);
+					tempOne.bounceX();
 				}
 
-				if((temp.getPosY()+temp.getSizeY() > bottom)){
-					temp.bounceY();
+				if((tempOne.getPosY()+tempOne.getSizeY() > bottom)){
+					tempOne.setyPos(bottom - tempOne.getSizeY() - 1);
+					tempOne.bounceY();
 				}
 
-				RpsList.get(i).draw(p, g);
-				RpsList.get(i).tick();
+				for(int j = 0; j<RpsList.size(); j++){
+					tempTwo = RpsList.get(j);
+					if(!tempOne.isDestroyed() && !tempTwo.isDestroyed()) {
 
+
+						if ((tempOne != tempTwo) && overlaps(tempOne, tempTwo)) {
+
+							if (tempOne instanceof RpsPaper && tempTwo instanceof RpsRock) {
+								tempTwo = (RpsRock)RpsList.get(j);
+								tempTwo.destroy();
+								tempOne.absorb(tempTwo);
+								return;
+							}
+						if(tempOne instanceof RpsPaper && tempTwo instanceof RpsScis){
+							tempOne = (RpsPaper)RpsList.get(i);
+							tempOne.destroy();
+							tempTwo.absorb(tempOne);
+						}
+//						/////////////////////////////
+						if(tempOne instanceof RpsScis && tempTwo instanceof RpsRock){
+							tempOne = (RpsScis)RpsList.get(i);
+							tempOne.destroy();
+							tempTwo.absorb(tempOne);
+						}
+						if(tempOne instanceof RpsScis && tempTwo instanceof RpsPaper){
+							tempTwo = (RpsPaper)RpsList.get(j);
+							tempTwo.destroy();
+							tempOne.absorb(tempTwo);
+						}
+//						////////////////////////////////
+						if(tempOne instanceof RpsRock && tempTwo instanceof RpsPaper){
+							tempOne = (RpsRock)RpsList.get(i);
+							tempOne.destroy();
+							tempTwo.absorb(tempOne);
+						}
+						if(tempOne instanceof RpsRock && tempTwo instanceof RpsScis){
+							tempTwo = (RpsScis)RpsList.get(j);
+							tempTwo.destroy();
+							tempOne.absorb(tempTwo);
+						}
+//						/////////////////////////////////
+						if(tempOne instanceof RpsPaper && tempTwo instanceof RpsPaper){
+							sameCollision((RpsPaper)tempOne, (RpsPaper)tempTwo);
+						}
+						if(tempOne instanceof RpsRock && tempTwo instanceof RpsRock){
+							sameCollision((RpsRock)tempOne, (RpsRock)tempTwo);
+						}
+						if(tempOne instanceof RpsScis && tempTwo instanceof RpsScis){
+							sameCollision((RpsScis)tempOne, (RpsScis)tempTwo);
+						}
+						}
+					}
+
+				}
+
+				if(!tempOne.isDestroyed()) {
+					tempOne.ticked();
+					tempOne.draw(p, g);
+				}
 			}
 		}
 
+	}
+
+	public void sameCollision(RpsObject r1, RpsObject r2){
+		if((r1.getSizeX()*r1.getSizeY() > (r2.getSizeX()*r2.getSizeY()))){
+			r2.destroy();
+			r1.absorb(r2);
+		}
+		else{
+			r1.destroy();
+			r2.absorb(r1);
+		}
+	}
+
+	public boolean overlaps(RpsObject t1, RpsObject t2){
+		if(t1.getPosX() > t2.getPosX() && t1.getPosX() < (t2.getPosX()+t2.getSizeX())){
+
+			if(t1.getPosY() > t2.getPosY() && t1.getPosY() < (t2.getPosY()+t2.getSizeY())) {
+				return true;
+			}
+
+			if((t1.getPosY()+t1.getSizeY()) > t2.getPosY()
+					&& (t1.getPosY()+t1.getSizeY()) < (t2.getPosY()+t2.getSizeY())){
+				return true;
+			}
+		}
+
+		if((t1.getPosX()+t1.getSizeX()) > t2.getPosX()
+				&& (t1.getPosX()+t1.getSizeX()) < (t2.getPosX()+t2.getSizeX())){
+
+			if(t1.getPosY() > t2.getPosY() && t1.getPosY() < (t2.getPosY()+t2.getSizeY())) {
+				return true;
+			}
+
+			if((t1.getPosY()+t1.getSizeY()) > t2.getPosY()
+					&& (t1.getPosY()+t1.getSizeY()) < (t2.getPosY()+t2.getSizeY())){
+				return true;
+			}
+
+		}
+
+		return false;
 	}
 
 	/**
@@ -102,12 +227,12 @@ public class RpsAnimator implements Animator{
 	 */
 	protected void addObject(int amount){
 
-		int temp = amount;
-		int amountRock = (int)(Math.random()*temp);
-		temp -=amountRock;
-		int amountScissor = (int)(Math.random()*temp);
-		temp -=amountScissor;
-		int amountPaper = temp;
+		int tempAmount = amount;
+		int amountRock = (int)(Math.random()*tempAmount);
+		tempAmount -=amountRock;
+		int amountScissor = (int)(Math.random()*tempAmount);
+		tempAmount -=amountScissor;
+		int amountPaper = tempAmount;
 
 		addObject(amountRock, 0);
 		addObject(amountScissor, 1);
@@ -125,16 +250,44 @@ public class RpsAnimator implements Animator{
 			randVelY = (float) (20 * Math.random() - 14);
 			randSizeX = (float) (2 + (4 * Math.random()));
 			randSizeY = (float) (2 + (4 * Math.random()));
-			RpsObject temp;
+			RpsObject tempAdd;
 			if (type == 0) {
-				temp = new RpsRock(randX, randY, randVelX, randVelY, randSizeX, randSizeY);
-				RpsList.add(temp);
+				tempAdd = new RpsRock(randX, randY, randVelX, randVelY, randSizeX, randSizeY);
+				RpsList.add(tempAdd);
 			} else if (type == 1) {
-				temp = new RpsScis(randX, randY, randVelX, randVelY, randSizeX, randSizeY);
-				RpsList.add(temp);
+				tempAdd = new RpsScis(randX, randY, randVelX, randVelY, randSizeX, randSizeY);
+				RpsList.add(tempAdd);
 			} else {
-				temp = new RpsPaper(randX, randY, randVelX, randVelY, randSizeX, randSizeY);
-				RpsList.add(temp);
+				tempAdd = new RpsPaper(randX, randY, randVelX, randVelY, randSizeX, randSizeY);
+				RpsList.add(tempAdd);
+			}
+		}
+	}
+
+	public void gravitate(float xFing, float yFing){
+		float a, b, c, grav;
+		for(int k = 0; k<RpsList.size(); k++){
+			if(xFing == -1 && yFing == -1){
+				RpsList.get(k).reSetGrav();
+			}
+			else if(RpsList.size() > 0){
+				a = xFing - RpsList.get(k).getPosX();
+				b = yFing - RpsList.get(k).getPosY();
+				c = (float) Math.sqrt((a*a + b*b));
+				grav = (float) (1/(c+0.1));
+				if(a > 0){
+					RpsList.get(k).setxGrav(grav);
+				}
+				if(a < 0){
+					RpsList.get(k).setxGrav(-grav);
+				}
+
+				if(b > 0){
+					RpsList.get(k).setyGrav(grav);
+				}
+				if(b < 0){
+					RpsList.get(k).setyGrav(-grav);
+				}
 			}
 		}
 	}
@@ -152,18 +305,24 @@ public class RpsAnimator implements Animator{
 		return false;
 	}
 
-	/**
-	 * reverse the ball's direction when the screen is tapped
-	 */
 
-
-	public void onTouch(MotionEvent event)
-	{
-		if (event.getAction() == MotionEvent.ACTION_DOWN)
-		{
-
+	public void onTouch(MotionEvent event) {
+		float x = event.getX();
+		float y = event.getY();
+		if(event.getAction() == ACTION_DOWN || event.getAction() == ACTION_MOVE){
+			gravitate(x, y);
 		}
+		else if(event.getAction() == ACTION_UP){
+			//gravitate(-1, -1);
+		}
+
+
+		//gravitate(x, y);
+
+
 	}
+
+
 
 
 }//class RpsAnimator

@@ -14,19 +14,12 @@ public class RpsActivity extends AppCompatActivity {
 
     // the animator
     private RpsAnimator animator;
-    Button rock;
-    Button scis;
-    Button paper;
-    Button rand;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rps);
-        rock = (Button)findViewById(R.id.rockButt);
-        scis = (Button)findViewById(R.id.scisButt);
-        paper = (Button)findViewById(R.id.paperButt);
-        rand = (Button)findViewById(R.id.randButt);
 
         // Connect the animation surface with the animator
         AnimationSurface mySurface = (AnimationSurface) this.findViewById(R.id.animationSurface);

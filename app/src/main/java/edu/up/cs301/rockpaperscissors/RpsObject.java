@@ -15,6 +15,8 @@ public abstract class RpsObject {
     protected float ySpd;
     protected float xSize;
     protected float ySize;
+    protected float gravityX;
+    protected float gravityY;
     protected boolean destroyed;
 
     public RpsObject(){}
@@ -27,6 +29,8 @@ public abstract class RpsObject {
         xSize = xSz;
         ySize = ySz;
         destroyed = false;
+        gravityX = 0;
+        gravityY = 0;
     }
 
     //whenever the animator detects that the object hits the left or right wall
@@ -37,15 +41,27 @@ public abstract class RpsObject {
     //it reverses direction and slows down by 10%
     public void bounceY(){ ySpd = -(float) (0.8*ySpd); }
 
-    public void isDestroyed(){ destroyed = true; }
+    public void destroy(){ destroyed = true; }
+
+    public boolean isDestroyed(){ return destroyed; }
 
     public void draw(Paint objColor, Canvas c){}
 
-    public void tick(){
+    public void absorb(RpsObject obj){
+        xSize += obj.getSizeX()/50;
+        ySize += obj.getSizeY()/50;
+        xSpd += obj.getVelX()/2;
+        ySpd += obj.getVelY()/2;
+    }
+
+    public void ticked(){
         xPos += xSpd;
         yPos += ySpd;
 
-        ySpd += 0.6;
+        ySpd += 0.8;
+
+        xSpd += gravityX*30;
+        ySpd += gravityY*30;
     }
 
     public float getSizeX(){
@@ -62,5 +78,31 @@ public abstract class RpsObject {
     public float getPosY(){
         return yPos;
     }
+    public float getVelX(){
+        return xSpd;
+    }
 
+    public float getVelY(){
+        return ySpd;
+    }
+
+    public void setxPos(float newX){
+        xPos = newX;
+    }
+
+    public void setyPos(float newY){
+        yPos = newY;
+    }
+
+    public void setxGrav(float newXGrav){
+        gravityX += newXGrav;
+    }
+
+    public void setyGrav(float newYGrav){
+        gravityY += newYGrav;
+    }
+    public void reSetGrav(){
+        gravityX = 0;
+        gravityY = 0;
+    }
 }

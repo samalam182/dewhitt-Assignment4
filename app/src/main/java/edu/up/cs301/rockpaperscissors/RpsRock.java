@@ -15,10 +15,6 @@ public class RpsRock extends RpsObject {
 
     @Override
     public void draw(Paint objColor, Canvas c) {
-//        Log.i("Position", "" + xPos + " " + yPos);
-//        Log.i("Velocity", "" + xSpd + " " + ySpd);
-//        Log.i("Size", "" + xSize + " " + ySize);
-
         Paint RPaint = objColor;
         RPaint.setColor(Color.BLACK);
 
